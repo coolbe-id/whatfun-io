@@ -3,26 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="google-site-verification" content="zIb4CdzLMpnitD8HRoGHQ3VQ2XLhmaOB2LB4l7mHfEk" />
-  
-  <!-- ✅ Favicon PNG (ikon tab browser) -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/ycrTKpts/1750453333696.png">
 
-  <!-- ✅ Thumbnail untuk Sosial Media -->
-  <!-- Open Graph untuk Facebook, Telegram, dll -->
   <meta property="og:title" content="Gabung ke WhatFun – media social anonymous tampa login">
   <meta property="og:description" content= "Gabung ke WhatFun – media sosial online tanpa ribet! Buat postingan, ngobrol di grup, dan seru-seruan tanpa perlu login. Cukup buka, ekspresikan dirimu, dan nikmati kebebasan bersosial!">
   <meta property="og:image" content="https://i.ibb.co/0VtCNtH5/1750453371020.png">
   <meta property="og:url" content="https://whatfun-baec7.web.app/?">
   <meta property="og:type" content="website">
 
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="whatfun-media social anonymous">
   <meta name="twitter:description" content="Gabung ke WhatFun – sosial media online tanpa perlu daftar atau login. Buat postingan, obrolan grup, dan ekspresikan dirimu dengan bebas!">
   <meta name="twitter:image" content="https://i.ibb.co/0VtCNtH5/1750453371020.png">
-  
-  
+
+
   <title>WhatFun - Your Creative Hub</title>
   <link rel="stylesheet" href="style.css"/>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -100,6 +94,40 @@
           <p>Memuat rekomendasi...</p>
         </div>
       </div>
+
+      
+      <div id="videoViewPage" class="page-content video-reels-page">
+        <div id="reelsContainer" class="reels-container">
+            <div class="video-reel-item" data-post-id="">
+                <video class="reel-video" controlslist="nodownload nofullscreen" loop autoplay playsinline></video>
+                <div class="reel-overlay">
+                    <div class="play-pause-icon">
+                        <i class="fas fa-play"></i> </div>
+                    <div class="video-info">
+                        <h3 class="reel-title"></h3>
+                        <p class="reel-description"></p>
+                        <div class="reel-hashtags"></div>
+                    </div>
+                </div>
+                <div class="reel-actions">
+                    <button class="upvote-button"><i class="fas fa-arrow-up"></i> <span class="upvote-count">0</span></button>
+                    <button class="downvote-button"><i class="fas fa-arrow-down"></i> <span class="downvote-count">0</span></button>
+                    <button class="comment-button"><i class="fas fa-comment"></i> <span class="comment-count">0</span></button>
+                </div>
+                 <div class="comments-section">
+                    <h3>Komentar</h3>
+                    <div class="comment-input-bar">
+                        <input type="text" placeholder="Tambahkan komentar..."/>
+                        <button>Kirim</button>
+                    </div>
+                    <div class="comment-list">
+                        <p class="no-comments">Belum ada komentar.</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+      </div>
+      ---
 
       <div id="donatePage" class="page-content">
         <div class="page-card">
@@ -196,6 +224,42 @@
     </div>
   </div>
 
+  <template id="video-post-template">
+    <div class="post-card video-post" data-post-id="">
+        <h3 class="post-title"></h3>
+        <small class="post-date"></small>
+        <div class="video-thumbnail-wrapper">
+            <video class="post-video" autoplay loop playsinline controlslist="nodownload"></video>
+            <div class="play-pause-overlay paused-icon">
+                <i class="fas fa-play"></i>
+            </div>
+        </div>
+        <p class="post-description"></p>
+        <div class="hashtags"></div>
+        <div class="vote-buttons">
+            <button class="upvote-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.414l-5.293 5.293a1 1 0 0 0 1.414 1.414L11 7.828V19a1 1 0 0 0 2 0V7.828l2.879 2.879a1 1 0 0 0 1.414-1.414L12 4.414z"/></svg>
+                <span class="upvote-count">0</span>
+            </button>
+            <button class="downvote-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 19.586l5.293-5.293a1 1 0 0 0-1.414-1.414L13 16.172V5a1 1 0 0 0-2 0v11.172l-2.879-2.879a1 1 0 0 0-1.414 1.414L12 19.586z"/></svg>
+                <span class="downvote-count">0</span>
+            </button>
+        </div>
+        <div class="comments-section">
+            <h3>Komentar</h3>
+            <div class="comment-input-bar">
+                <input type="text" placeholder="Tambahkan komentar..."/>
+                <button>Kirim</button>
+            </div>
+            <div class="comment-list">
+                <p class="no-comments">Belum ada komentar.</p>
+            </div>
+        </div>
+    </div>
+  </template>
+
   <script src="script.js"></script>
 </body>
-</html>
+  </html>
+  
