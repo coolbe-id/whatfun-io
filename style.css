@@ -6,9 +6,10 @@
 }
 
 :root {
+    /* Light Mode Variables */
     --primary-bg: #f0f2f5; /* Light background for the overall page */
-    --secondary-bg: #ffffff; /* Card backgrounds, modals */
-    --tertiary-bg: #e4e6eb; /* Hover states, subtle separators */
+    --secondary-bg: #ffffff; /* Card backgrounds, modals, input fields */
+    --tertiary-bg: #e4e6eb; /* Hover states, subtle separators, input background */
     --text-color: #333333; /* Main dark text */
     --light-text-color: #606770; /* Secondary text, descriptions */
     --border-color: #dddddd; /* Subtle borders */
@@ -19,6 +20,9 @@
     --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow for cards */
     --error-color: #ff4d4f; /* Error messages */
     --success-color: #52c41a; /* Success messages */
+    --card-bg: var(--secondary-bg); /* Alias for card backgrounds, consistent with secondary-bg */
+    --hover-bg: var(--tertiary-bg); /* Alias for hover background, consistent with tertiary-bg */
+
 
     /* Dark Mode specific variables */
     --dark-primary-bg: #18191a;
@@ -30,6 +34,8 @@
     --dark-shadow-color: rgba(0, 0, 0, 0.4);
     --dark-button-bg: var(--accent-color); /* Same accent for dark mode buttons */
     --dark-button-text: #ffffff;
+    --dark-card-bg: var(--dark-secondary-bg); /* Alias for dark mode card backgrounds */
+    --dark-hover-bg: var(--dark-tertiary-bg); /* Alias for dark mode hover background */
 }
 
 /* Base styles for dark mode */
@@ -43,11 +49,13 @@ body.dark-mode {
     --shadow-color: var(--dark-shadow-color);
     --button-bg: var(--dark-button-bg);
     --button-text: var(--dark-button-text);
+    --card-bg: var(--dark-card-bg);
+    --hover-bg: var(--dark-hover-bg);
 }
 
 body {
     font-family: Arial, sans-serif;
-    background-color: var(--secondary-bg);
+    background-color: var(--primary-bg); /* Changed to primary-bg for overall page */
     color: var(--text-color);
     line-height: 1.6;
     display: flex; /* Make body a flex container */
@@ -91,7 +99,7 @@ header h1 {
 .search-bar-pc {
     display: none; /* Hidden by default, shown on PC */
     align-items: center;
-    background-color: var(--secondary-bg);
+    background-color: var(--tertiary-bg); /* Adjusted for better light mode contrast */
     border-radius: 20px;
     padding: 5px 10px;
 }
@@ -227,7 +235,7 @@ header h1 {
 }
 
 .post-input-area {
-    background-color: var(--secondary-bg);
+    background-color: var(--tertiary-bg); /* Consistent with search bar */
     border-radius: 25px;
     padding: 10px 15px;
     cursor: pointer;
@@ -289,18 +297,76 @@ header h1 {
 }
 
 /* --- IMPORTANT FIXES FOR MOBILE MEDIA DISPLAY & SIZE --- */
-.post-card img,
-.post-card video {
+.post-card img {
     width: 100% !important; /* Force to take full width of parent */
     max-width: 100%; /* Ensures media does not overflow its container */
     height: auto;    /* Maintains aspect ratio */
     border-radius: 4px;
     margin-bottom: 10px;
     display: block;  /* Prevents extra space below images (common issue) */
-    object-fit: contain; /* Ensures the whole image/video is visible within its bounds */
-    /* If you prefer the image/video to fill the space and crop, use 'cover' */
-    /* object-fit: cover; */
+    object-fit: contain; /* Ensures the whole image is visible within its bounds */
 }
+
+.post-card video {
+    width: 100% !important;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: block;
+    object-fit: contain;
+}
+
+/* Video Thumbnail Wrapper for Play Overlay */
+.video-thumbnail-wrapper {
+    position: relative;
+    width: 100%;
+    height: auto; /* Ensure height adjusts with video */
+    margin-bottom: 10px;
+    border-radius: 4px;
+    overflow: hidden; /* For border-radius */
+    cursor: pointer;
+}
+
+.video-thumbnail-wrapper video {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Use cover for thumbnails to fill space */
+    filter: brightness(0.8); /* Slightly dim the thumbnail */
+    transition: filter 0.2s ease;
+}
+
+.video-thumbnail-wrapper:hover video {
+    filter: brightness(1.0); /* Brighten on hover */
+}
+
+/* New: Play/Pause Overlay for Feed Videos */
+/* START OF MODIFICATION: Hide Play/Pause Overlay */
+.play-pause-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Slightly transparent overlay */
+    display: none !important; /* DISINI PERUBAHAN: Menyembunyikan overlay putar/jeda */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s ease-in-out;
+}
+
+.play-pause-overlay.paused-icon {
+    opacity: 1; /* Show when video is paused */
+}
+
+.play-pause-overlay i {
+    font-size: 60px;
+    color: rgba(255, 255, 255, 0.9);
+}
+/* END OF MODIFICATION */
 /* --- END OF IMPORTANT FIXES --- */
 
 
@@ -323,7 +389,7 @@ header h1 {
 
 .hashtags span {
     display: inline-block;
-    background-color: var(--secondary-bg);
+    background-color: var(--tertiary-bg); /* Adjusted for better visibility */
     color: var(--accent-color);
     padding: 4px 8px;
     border-radius: 15px;
@@ -332,13 +398,15 @@ header h1 {
     margin-bottom: 5px;
 }
 
+/* START OF MODIFICATION: Show Vote Buttons */
 .vote-buttons {
-    display: flex;
+    display: flex; /* DISINI PERUBAHAN: Menampilkan kembali tombol vote */
     gap: 10px;
     margin-top: 15px;
     padding-top: 15px;
     border-top: 1px solid var(--border-color);
 }
+/* END OF MODIFICATION */
 
 .vote-buttons button {
     background-color: var(--button-bg);
@@ -355,7 +423,7 @@ header h1 {
 }
 
 .vote-buttons button:hover {
-    background-color: var(--hover-bg);
+    background-color: var(--hover-bg); /* Use hover-bg for consistency */
     color: var(--accent-color);
 }
 
@@ -390,7 +458,7 @@ header h1 {
     padding: 8px 12px;
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    background-color: var(--secondary-bg);
+    background-color: var(--tertiary-bg); /* Consistent with other inputs */
     color: var(--text-color);
     outline: none;
 }
@@ -401,7 +469,7 @@ header h1 {
 
 .comment-input-bar button {
     background-color: var(--accent-color);
-    color: #fff;
+    color: var(--button-text);
     border: none;
     padding: 8px 15px;
     border-radius: 20px;
@@ -410,7 +478,7 @@ header h1 {
 }
 
 .comment-input-bar button:hover {
-    background-color: #1565c0; /* Darker blue */
+    background-color: var(--accent-hover); /* Use accent-hover for consistency */
 }
 
 .comment-list {
@@ -423,7 +491,7 @@ header h1 {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    background-color: var(--secondary-bg);
+    background-color: var(--secondary-bg); /* Use secondary-bg for individual comment cards */
     padding: 10px 15px;
     border-radius: 8px;
     margin-bottom: 8px;
@@ -487,19 +555,146 @@ header h1 {
     padding: 10px 15px;
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    background-color: var(--secondary-bg);
+    background-color: var(--tertiary-bg); /* Consistent with other inputs */
     color: var(--text-color);
     outline: none;
 }
 
 .explore-search button {
     background-color: var(--accent-color);
-    color: #fff;
+    color: var(--button-text);
     border: none;
     padding: 10px 15px;
     border-radius: 20px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+}
+
+.explore-search button:hover {
+    background-color: var(--accent-hover);
+}
+
+/* New: Reels-like Video View Page */
+.video-reels-page {
+    position: fixed; /* Take over the entire screen */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black; /* Dark background for videos */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll; /* Enable vertical scrolling */
+    scroll-snap-type: y mandatory; /* For smooth snapping to each video */
+    -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+    z-index: 1000; /* Ensure it's on top of other content */
+    display: none; /* Hidden by default, shown by JS */
+}
+
+.reels-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.video-reel-item {
+    width: 100%;
+    height: 100vh; /* Each reel item takes full viewport height */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start; /* Snap to the start of each reel */
+    background-color: black; /* Fallback */
+    overflow: hidden; /* Hide anything outside the reel item */
+}
+
+.video-reel-item .reel-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Or 'cover' if you want it to fill the screen and potentially crop */
+    background-color: black;
+}
+
+.reel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Info at the bottom */
+    padding: 20px;
+    box-sizing: border-box;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); /* Gradient for text readability */
+    color: white;
+}
+
+.reel-overlay .play-pause-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    display: none; /* Hidden by default, shown when video is paused */
+    pointer-events: none; /* Allow clicks to pass through to video */
+}
+
+.reel-overlay .play-pause-icon.active {
+    display: block; /* Show when active */
+}
+
+.video-info {
+    z-index: 1; /* Above the gradient */
+}
+
+.video-info h3 {
+    margin-bottom: 5px;
+    font-size: 1.2em;
+}
+
+.video-info p {
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.reel-hashtags span {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 0.8em;
+    color: #add8e6; /* Light blue for hashtags */
+}
+
+.reel-actions {
+    position: absolute;
+    right: 15px;
+    bottom: 120px; /* Adjust based on bottom nav/comments */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: white;
+    z-index: 2;
+}
+
+.reel-actions button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.8em;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.reel-actions button span {
+    font-size: 0.6em;
 }
 
 /* Donate Page */
@@ -535,7 +730,7 @@ header h1 {
 
 .donate-button {
     background-color: var(--accent-color);
-    color: white;
+    color: var(--button-text);
     border: none;
     padding: 12px 25px;
     border-radius: 8px;
@@ -548,7 +743,7 @@ header h1 {
 }
 
 .donate-button:hover {
-    background-color: #1565c0;
+    background-color: var(--accent-hover);
     transform: translateY(-2px);
 }
 
@@ -752,7 +947,7 @@ input:checked + .slider:before {
 
 .upload-submit-button {
     background-color: var(--accent-color);
-    color: white;
+    color: var(--button-text);
     border: none;
     padding: 8px 18px;
     border-radius: 20px;
@@ -762,7 +957,7 @@ input:checked + .slider:before {
 }
 
 .upload-submit-button:disabled {
-    background-color: var(--button-bg);
+    background-color: var(--tertiary-bg); /* Use a lighter background for disabled */
     color: var(--light-text-color);
     cursor: not-allowed;
 }
@@ -781,7 +976,7 @@ input:checked + .slider:before {
     padding: 12px 15px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background-color: var(--secondary-bg);
+    background-color: var(--tertiary-bg); /* Consistent with other inputs */
     color: var(--text-color);
     font-size: 1em;
     outline: none;
@@ -799,7 +994,7 @@ input:checked + .slider:before {
 
 .preview-area {
     width: 100%;
-    background-color: var(--secondary-bg);
+    background-color: var(--tertiary-bg); /* Consistent with other inputs */
     border-radius: 8px;
     min-height: 150px;
     display: flex;
@@ -866,17 +1061,17 @@ input:checked + .slider:before {
 }
 
 .status-message {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: var(--success-color); /* Use success color */
+    color: white; /* White text for better contrast */
 }
 
 .error-message {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: var(--error-color); /* Use error color */
+    color: white; /* White text for better contrast */
 }
 
 .loading-spinner {
-    border: 4px solid #f3f3f3;
+    border: 4px solid var(--border-color); /* Lighter border */
     border-top: 4px solid var(--accent-color);
     border-radius: 50%;
     width: 40px;
@@ -950,6 +1145,19 @@ input:checked + .slider:before {
     .explore-search {
         max-width: none; /* Allow full width within main-content */
     }
+
+    /* Video Reels Page on Tablet (behaves like mobile for full screen vertical scroll) */
+    .video-reels-page {
+        padding-top: 0; /* Full screen, so header is irrelevant to its internal padding */
+    }
+
+    .video-reel-item {
+        /* These already take 100vw/100vh, which is fine for tablet */
+    }
+
+    .reel-actions {
+        /* Adjust bottom position if bottom nav is gone but you have other fixed elements */
+    }
 }
 
 
@@ -1001,7 +1209,28 @@ input:checked + .slider:before {
         max-width: 600px; /* Keep posts/input centered and readable width */
         width: 100%;
     }
+
+    /* Video Reels Page on PC (behaves like mobile for full screen vertical scroll) */
+    .video-reels-page {
+        padding-top: 0; /* Full screen, so header is irrelevant to its internal padding */
+    }
+
+    .video-reel-item {
+        /* These already take 100vw/100vh, which is fine for PC */
+    }
+
+    .reel-actions {
+        /* Adjust bottom position if bottom nav is gone but you have other fixed elements */
+    }
+
+    #explore-content-container {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Larger items for PC */
+        max-width: 1000px; /* Wider grid on PC */
+        gap: 30px; /* Larger gap */
+    }
 }
+
+
 /* Donate Pages Specific */
 .donate-coffee-page,
 .donate-custom-page {
@@ -1112,6 +1341,7 @@ input:checked + .slider:before {
     color: var(--accent-color); /* Ikon di pesan terima kasih */
     font-size: 1.4em;
 }
+
 /* Help Center & About Us Specific */
 .help-center-page,
 .about-us-page {
@@ -1277,5 +1507,19 @@ input:checked + .slider:before {
 
     .social-links a {
         font-size: 2em;
+    }
+
+    /* Reels-like specific adjustments for mobile */
+    .video-reels-page {
+        padding-top: 0; /* Remove top padding for mobile as header is hidden */
+        min-height: 100vh; /* Fill full height */
+    }
+
+    .video-reel-item {
+        /* Already uses 100vh, which is good for mobile */
+    }
+
+    .reel-actions {
+        bottom: 80px; /* Adjust if bottom nav is present or comments pop up */
     }
 }
