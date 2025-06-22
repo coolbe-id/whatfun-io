@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Bot - WhatFun</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: .5rem;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: .5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: .75rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .status {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-robot"></i> Panel Bot</h1>
+    <div class="form-group">
+      <label for="postBots">Jumlah Bot Posting per Hari</label>
+      <input type="number" id="postBots" placeholder="Contoh: 10">
+    </div>
+    <div class="form-group">
+      <label for="commentBots">Jumlah Bot Komentar</label>
+      <input type="number" id="commentBots" placeholder="Contoh: 5">
+    </div>
+    <div class="form-group">
+      <label for="voteBots">Jumlah Bot Voting</label>
+      <input type="number" id="voteBots" placeholder="Contoh: 3">
+    </div>
+    <button onclick="simpanPengaturanBot()"><i class="fas fa-save"></i> Simpan Pengaturan</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAeotajhNxY8fbnlduQYgw2Onm5lhzQ6sg",
+      authDomain: "whatfun-800ed.firebaseapp.com",
+      projectId: "whatfun-800ed",
+      storageBucket: "whatfun-800ed.appspot.com",
+      messagingSenderId: "741248738326",
+      appId: "1:741248738326:web:10e6aa3b15f30306038137"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    function simpanPengaturanBot() {
+      const postBots = parseInt(document.getElementById('postBots').value);
+      const commentBots = parseInt(document.getElementById('commentBots').value);
+      const voteBots = parseInt(document.getElementById('voteBots').value);
+
+      if (isNaN(postBots) || isNaN(commentBots) || isNaN(voteBots)) {
+        document.getElementById('status').textContent = "❌ Pastikan semua angka diisi dengan benar.";
+        return;
+      }
+
+      db.collection("botSettings").doc("global").set({
+        postBots,
+        commentBots,
+        voteBots,
+        updatedAt: Date.now()
+      }).then(() => {
+        document.getElementById('status').textContent = "✅ Pengaturan bot berhasil disimpan.";
+      }).catch((error) => {
+        console.error("Gagal menyimpan pengaturan: ", error);
+        document.getElementById('status').textContent = "❌ Gagal menyimpan. Lihat konsol.";
+      });
+    }
+
+    // Daftar Bot dan Konten
+    const botList = [
+      { id: "botCurhat1", style: "curhat" },
+      { id: "botKomentator1", style: "komen" },
+      { id: "botVoting1", style: "vote" },
+      { id: "botLucu1", style: "lucu" },
+      { id: "botMotivasi1", style: "motivasi" },
+      { id: "botTanya1", style: "tanya" }
+    ];
+
+    const kontenBot = {
+      curhat: ["Hari ini capek banget... 😞", "Perasaan ini kosong banget.", "Pengen ngilang sebentar."],
+      komen: ["Setuju banget!", "Keren sih ini.", "Haha, lucu juga ya."],
+      lucu: ["Kenapa ayam nyebrang jalan? Nge-lag.", "Senyum dong, jangan kayak tagihan 😅"],
+      tanya: ["Kalau bisa balik masa lalu, mau ngapain?", "Apa arti bahagia buatmu?"],
+      motivasi: ["Semangat! Hari ini pasti lebih baik. 💪", "Hal hebat butuh waktu 🌟"]
+    };
+
+    // Fungsi Bot
+    function postByBot() {
+      const bot = botList[Math.floor(Math.random() * botList.length)];
+      const content = (kontenBot[bot.style] || ["Hello world"])[Math.floor(Math.random() * 3)];
+      const post = {
+        description: content,
+        userId: bot.id,
+        createdAt: Date.now(),
+        votes: 0,
+        votedBy: [],
+        comments: []
+      };
+      db.collection("posts").add(post);
+    }
+
+    function autoVoteBot() {
+      db.collection("posts").get().then(snapshot => {
+        const docs = snapshot.docs;
+        if (!docs.length) return;
+        const doc = docs[Math.floor(Math.random() * docs.length)];
+        const data = doc.data();
+        const vote = Math.random() < 0.7 ? 1 : -1;
+
+        db.collection("posts").doc(doc.id).update({
+          votes: (data.votes || 0) + vote,
+          votedBy: (data.votedBy || []).concat("botVoting")
+        });
+      });
+    }
+
+    function autoCommentBot() {
+      db.collection("posts").get().then(snapshot => {
+        const post = snapshot.docs.find(doc => {
+          const data = doc.data();
+          return !data.comments || data.comments.length < 3;
+        });
+
+        if (!post) return;
+
+        const komentar = kontenBot.komen[Math.floor(Math.random() * kontenBot.komen.length)];
+        const comment = {
+          userId: "botKomentator1",
+          text: komentar,
+          createdAt: Date.now()
+        };
+        const existing = post.data().comments || [];
+
+        db.collection("posts").doc(post.id).update({
+          comments: [...existing, comment]
+        });
+      });
+    }
+
+    // Jadwal Otomatis dengan baca setting
+    function scheduleBotActivity() {
+      db.collection("botSettings").doc("global").get().then(doc => {
+        if (!doc.exists) return;
+
+        const { postBots, commentBots, voteBots } = doc.data();
+        const totalActions = postBots + commentBots + voteBots;
+        if (totalActions === 0) return;
+
+        const interval = (24 * 60 * 60 * 1000) / totalActions; // dibagi rata dalam sehari
+
+        setInterval(() => {
+          const rand = Math.random();
+          if (rand < postBots / totalActions) postByBot();
+          else if (rand < (postBots + voteBots) / totalActions) autoVoteBot();
+          else autoCommentBot();
+        }, interval);
+      });
+    }
+
+    // Jalankan saat halaman dibuka
+    scheduleBotActivity();
+  </script>
+</body>
+  </html>
