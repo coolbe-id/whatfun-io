@@ -7,21 +7,49 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
       margin: 0;
       padding: 2rem;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
     }
     .container {
-      max-width: 600px;
-      margin: auto;
+      max-width: 800px;
+      width: 100%;
       background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      animation: fadeIn 0.8s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     h1 {
       text-align: center;
+      color: #007bff;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 i {
+      margin-right: 15px;
+      color: #6a11cb;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      color: #007bff;
+      margin-top: 2.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
     }
     .form-group {
       margin-bottom: 1.5rem;
@@ -29,60 +57,233 @@
     label {
       display: block;
       font-weight: bold;
-      margin-bottom: .5rem;
+      margin-bottom: .6rem;
+      color: #555;
     }
-    input[type="number"] {
-      width: 100%;
-      padding: .5rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+    input[type="number"],
+    textarea {
+      width: calc(100% - 20px);
+      padding: .8rem 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    input[type="number"]:focus,
+    textarea:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0,123,255,0.2);
+      outline: none;
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
     }
     button {
-      width: 100%;
-      padding: .75rem;
+      flex: 1;
+      padding: 1rem;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       background-color: #007bff;
       color: white;
-      font-size: 1rem;
+      font-size: 1.1rem;
       cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     button:hover {
       background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+    button i {
+      margin-right: 10px;
     }
     .status {
       text-align: center;
-      margin-top: 1rem;
+      margin-top: 1.8rem;
       font-weight: bold;
+      font-size: 1.1rem;
+      padding: 10px;
+      border-radius: 8px;
+      transition: all 0.4s ease;
+    }
+    .status.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .status.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .status.info {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    .bot-settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .bot-card {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+    }
+    .bot-card h3 {
+      margin-top: 0;
+      color: #2575fc;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .bot-card h3 i {
+      margin-right: 10px;
+      color: #6a11cb;
+    }
+    .bot-card .form-group:last-child {
+      margin-bottom: 0;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1><i class="fas fa-robot"></i> Panel Bot</h1>
-    <div class="form-group">
-      <label for="postBots">Jumlah Bot Posting per Hari</label>
-      <input type="number" id="postBots" placeholder="Contoh: 10">
-    </div>
-    <div class="form-group">
-      <label for="commentBots">Jumlah Bot Komentar</label>
-      <input type="number" id="commentBots" placeholder="Contoh: 5">
-    </div>
-    <div class="form-group">
-      <label for="voteBots">Jumlah Bot Voting</label>
-      <input type="number" id="voteBots" placeholder="Contoh: 3">
-    </div>
-    <button onclick="simpanPengaturanBot()"><i class="fas fa-save"></i> Simpan Pengaturan</button>
+    <h1><i class="fas fa-cogs"></i> Panel Bot WhatFun</h1>
+
     <div class="status" id="status"></div>
+
+    <div class="section-title">Pengaturan Umum Bot</div>
+    <div class="form-group">
+      <label for="postBotsPerDay">Target Jumlah Post Bot per Hari</label>
+      <input type="number" id="postBotsPerDay" placeholder="Contoh: 10" value="10">
+    </div>
+    <div class="form-group">
+      <label for="commentBotsPerDay">Target Jumlah Komentar Bot per Hari</label>
+      <input type="number" id="commentBotsPerDay" placeholder="Contoh: 5" value="5">
+    </div>
+    <div class="form-group">
+      <label for="voteBotsPerDay">Target Jumlah Voting Bot per Hari</label>
+      <input type="number" id="voteBotsPerDay" placeholder="Contoh: 3" value="3">
+    </div>
+
+    <div class="section-title">Konten Bot & Status</div>
+    <div class="bot-settings-grid">
+      <div class="bot-card">
+        <h3><i class="fas fa-pen"></i> Bot Curhat</h3>
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableCurhatBot" checked>
+          <label for="enableCurhatBot">Aktifkan Bot</label>
+        </div>
+        <div class="form-group">
+          <label for="curhatContent">Konten Curhat (pisahkan dengan baris baru)</label>
+          <textarea id="curhatContent">Hari ini capek banget... 😞
+Perasaan ini kosong banget.
+Pengen ngilang sebentar.</textarea>
+        </div>
+      </div>
+
+      <div class="bot-card">
+        <h3><i class="fas fa-comment"></i> Bot Komentator</h3>
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableKomentatorBot" checked>
+          <label for="enableKomentatorBot">Aktifkan Bot</label>
+        </div>
+        <div class="form-group">
+          <label for="komentarContent">Konten Komentar (pisahkan dengan baris baru)</label>
+          <textarea id="komentarContent">Setuju banget!
+Keren sih ini.
+Haha, lucu juga ya.
+Mantap jiwa!
+Bikin ngakak!</textarea>
+        </div>
+      </div>
+
+      <div class="bot-card">
+        <h3><i class="fas fa-grin-beam"></i> Bot Lucu</h3>
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableLucuBot" checked>
+          <label for="enableLucuBot">Aktifkan Bot</label>
+        </div>
+        <div class="form-group">
+          <label for="lucuContent">Konten Lucu (pisahkan dengan baris baru)</label>
+          <textarea id="lucuContent">Kenapa ayam nyebrang jalan? Nge-lag.
+Senyum dong, jangan kayak tagihan 😅
+Apa bedanya kamu sama modem? Kamu connect-in hatiku.</textarea>
+        </div>
+      </div>
+
+      <div class="bot-card">
+        <h3><i class="fas fa-lightbulb"></i> Bot Motivasi</h3>
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableMotivasiBot" checked>
+          <label for="enableMotivasiBot">Aktifkan Bot</label>
+        </div>
+        <div class="form-group">
+          <label for="motivasiContent">Konten Motivasi (pisahkan dengan baris baru)</label>
+          <textarea id="motivasiContent">Semangat! Hari ini pasti lebih baik. 💪
+Hal hebat butuh waktu 🌟
+Jangan menyerah, kamu lebih kuat dari yang kamu kira.</textarea>
+        </div>
+      </div>
+
+      <div class="bot-card">
+        <h3><i class="fas fa-question-circle"></i> Bot Tanya</h3>
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableTanyaBot" checked>
+          <label for="enableTanyaBot">Aktifkan Bot</label>
+        </div>
+        <div class="form-group">
+          <label for="tanyaContent">Konten Tanya (pisahkan dengan baris baru)</label>
+          <textarea id="tanyaContent">Kalau bisa balik masa lalu, mau ngapain?
+Apa arti bahagia buatmu?
+Apa hal paling aneh yang pernah kamu alami?</textarea>
+        </div>
+      </div>
+
+       <div class="bot-card">
+        <h3><i class="fas fa-vote-yea"></i> Bot Voting</h3>
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableVoteBot" checked>
+          <label for="enableVoteBot">Aktifkan Bot</label>
+        </div>
+        <p>Bot ini akan melakukan voting secara acak pada postingan.</p>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button onclick="saveBotSettings()"><i class="fas fa-save"></i> Simpan Pengaturan</button>
+      <button onclick="loadBotSettings()"><i class="fas fa-redo-alt"></i> Muat Pengaturan Terakhir</button>
+    </div>
   </div>
 
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyAeotajhNxY8fbnlduQYgw2Onm5lhzQ6sg",
+      apiKey: "AIzaSyAeotajhNxY8fbnlduQYgw2Onm5lhzQ6sg", // Replace with your actual API Key
       authDomain: "whatfun-800ed.firebaseapp.com",
       projectId: "whatfun-800ed",
       storageBucket: "whatfun-800ed.appspot.com",
@@ -93,122 +294,378 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    function simpanPengaturanBot() {
-      const postBots = parseInt(document.getElementById('postBots').value);
-      const commentBots = parseInt(document.getElementById('commentBots').value);
-      const voteBots = parseInt(document.getElementById('voteBots').value);
+    const botTypes = {
+      curhat: { id: "botCurhat1", icon: "fas fa-pen", name: "Curhat Bot", collection: "posts" },
+      komen: { id: "botKomentator1", icon: "fas fa-comment", name: "Komentator Bot", collection: "posts" },
+      lucu: { id: "botLucu1", icon: "fas fa-grin-beam", name: "Lucu Bot", collection: "posts" },
+      motivasi: { id: "botMotivasi1", icon: "fas fa-lightbulb", name: "Motivasi Bot", collection: "posts" },
+      tanya: { id: "botTanya1", icon: "fas fa-question-circle", name: "Tanya Bot", collection: "posts" },
+      vote: { id: "botVoting1", icon: "fas fa-vote-yea", name: "Voting Bot", collection: "posts" }
+    };
 
-      if (isNaN(postBots) || isNaN(commentBots) || isNaN(voteBots)) {
-        document.getElementById('status').textContent = "❌ Pastikan semua angka diisi dengan benar.";
+    let botIntervals = {}; // To store intervals for stopping and restarting
+
+    /**
+     * Displays status messages to the user.
+     * @param {string} message - The message to display.
+     * @param {string} type - The type of message ('success', 'error', 'info').
+     */
+    function showStatus(message, type = 'info') {
+      const statusElement = document.getElementById('status');
+      if (statusElement) {
+        statusElement.textContent = message;
+        statusElement.className = `status ${type}`;
+        setTimeout(() => {
+          statusElement.textContent = '';
+          statusElement.className = 'status';
+        }, 5000);
+      }
+    }
+
+    /**
+     * Helper to capitalize the first letter of a string.
+     */
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    /**
+     * Saves bot settings to Firebase.
+     */
+    async function saveBotSettings() {
+      const postBotsPerDayInput = document.getElementById('postBotsPerDay');
+      const commentBotsPerDayInput = document.getElementById('commentBotsPerDay');
+      const voteBotsPerDayInput = document.getElementById('voteBotsPerDay');
+
+      // Check if critical input elements exist
+      if (!postBotsPerDayInput || !commentBotsPerDayInput || !voteBotsPerDayInput) {
+          showStatus("❌ Kesalahan: Beberapa elemen input utama tidak ditemukan.", "error");
+          return;
+      }
+
+      const postBotsPerDay = parseInt(postBotsPerDayInput.value);
+      const commentBotsPerDay = parseInt(commentBotsPerDayInput.value);
+      const voteBotsPerDay = parseInt(voteBotsPerDayInput.value);
+
+      if (isNaN(postBotsPerDay) || isNaN(commentBotsPerDay) || isNaN(voteBotsPerDay) ||
+          postBotsPerDay < 0 || commentBotsPerDay < 0 || voteBotsPerDay < 0) {
+        showStatus("❌ Pastikan target jumlah bot diisi dengan angka positif.", "error");
         return;
       }
 
-      db.collection("botSettings").doc("global").set({
-        postBots,
-        commentBots,
-        voteBots,
-        updatedAt: Date.now()
-      }).then(() => {
-        document.getElementById('status').textContent = "✅ Pengaturan bot berhasil disimpan.";
-      }).catch((error) => {
+      const settings = {
+        general: {
+          postBotsPerDay,
+          commentBotsPerDay,
+          voteBotsPerDay,
+          updatedAt: Date.now()
+        },
+        botContent: {},
+        botEnabled: {}
+      };
+
+      for (const key in botTypes) {
+        const contentId = `${key}Content`;
+        const enableId = `enable${capitalizeFirstLetter(key)}Bot`;
+        const contentElement = document.getElementById(contentId);
+        const enableElement = document.getElementById(enableId);
+
+        if (key === 'vote') { // Special handling for vote bot as it doesn't have content textarea
+            if (enableElement) {
+                settings.botEnabled[key] = enableElement.checked;
+            } else {
+                console.warn(`Element with ID ${enableId} not found for bot type ${key}.`);
+                settings.botEnabled[key] = false; // Default to disabled if element is missing
+            }
+            continue;
+        }
+
+        if (contentElement) {
+            settings.botContent[key] = contentElement.value.split('\n').filter(line => line.trim() !== '');
+        } else {
+            console.warn(`Element with ID ${contentId} not found for bot type ${key}.`);
+            settings.botContent[key] = []; // Default to empty array if element is missing
+        }
+
+        if (enableElement) {
+            settings.botEnabled[key] = enableElement.checked;
+        } else {
+            console.warn(`Element with ID ${enableId} not found for bot type ${key}.`);
+            settings.botEnabled[key] = false; // Default to disabled if element is missing
+        }
+      }
+
+      try {
+        await db.collection("botSettings").doc("global").set(settings);
+        showStatus("✅ Pengaturan bot berhasil disimpan.", "success");
+        scheduleBotActivity(); // Reschedule bots with new settings
+      } catch (error) {
         console.error("Gagal menyimpan pengaturan: ", error);
-        document.getElementById('status').textContent = "❌ Gagal menyimpan. Lihat konsol.";
-      });
+        showStatus("❌ Gagal menyimpan pengaturan. Lihat konsol untuk detail.", "error");
+      }
     }
 
-    // Daftar Bot dan Konten
-    const botList = [
-      { id: "botCurhat1", style: "curhat" },
-      { id: "botKomentator1", style: "komen" },
-      { id: "botVoting1", style: "vote" },
-      { id: "botLucu1", style: "lucu" },
-      { id: "botMotivasi1", style: "motivasi" },
-      { id: "botTanya1", style: "tanya" }
-    ];
+    /**
+     * Loads bot settings from Firebase and populates the form.
+     */
+    async function loadBotSettings() {
+      try {
+        const doc = await db.collection("botSettings").doc("global").get();
+        if (doc.exists) {
+          const data = doc.data();
+          // Use optional chaining with fallback for robust data access
+          document.getElementById('postBotsPerDay').value = data.general?.postBotsPerDay ?? 10;
+          document.getElementById('commentBotsPerDay').value = data.general?.commentBotsPerDay ?? 5;
+          document.getElementById('voteBotsPerDay').value = data.general?.voteBotsPerDay ?? 3;
 
-    const kontenBot = {
-      curhat: ["Hari ini capek banget... 😞", "Perasaan ini kosong banget.", "Pengen ngilang sebentar."],
-      komen: ["Setuju banget!", "Keren sih ini.", "Haha, lucu juga ya."],
-      lucu: ["Kenapa ayam nyebrang jalan? Nge-lag.", "Senyum dong, jangan kayak tagihan 😅"],
-      tanya: ["Kalau bisa balik masa lalu, mau ngapain?", "Apa arti bahagia buatmu?"],
-      motivasi: ["Semangat! Hari ini pasti lebih baik. 💪", "Hal hebat butuh waktu 🌟"]
-    };
+          for (const key in botTypes) {
+            const contentElement = document.getElementById(`${key}Content`);
+            const enableElement = document.getElementById(`enable${capitalizeFirstLetter(key)}Bot`);
 
-    // Fungsi Bot
-    function postByBot() {
-      const bot = botList[Math.floor(Math.random() * botList.length)];
-      const content = (kontenBot[bot.style] || ["Hello world"])[Math.floor(Math.random() * 3)];
+            if (key === 'vote') {
+                if (enableElement) {
+                    enableElement.checked = data.botEnabled?.[key] ?? false;
+                }
+                continue;
+            }
+
+            if (contentElement) {
+              contentElement.value = (data.botContent?.[key] || []).join('\n');
+            }
+            if (enableElement) {
+              enableElement.checked = data.botEnabled?.[key] ?? false;
+            }
+          }
+          showStatus("🔄 Pengaturan terakhir berhasil dimuat.", "info");
+        } else {
+          showStatus("ℹ️ Belum ada pengaturan tersimpan. Menggunakan nilai default.", "info");
+          // Initialize UI with default values if no settings exist in Firebase
+          document.getElementById('postBotsPerDay').value = 10;
+          document.getElementById('commentBotsPerDay').value = 5;
+          document.getElementById('voteBotsPerDay').value = 3;
+          for (const key in botTypes) {
+            const enableElement = document.getElementById(`enable${capitalizeFirstLetter(key)}Bot`);
+            if (enableElement) enableElement.checked = true; // Enable all by default
+            const contentElement = document.getElementById(`${key}Content`);
+            if (contentElement && !contentElement.value) { // Populate if empty
+              // This part would need to load default content strings if not already in HTML
+            }
+          }
+        }
+        scheduleBotActivity(); // Always attempt to schedule after loading/defaulting settings
+      } catch (error) {
+        console.error("Gagal memuat pengaturan: ", error);
+        showStatus("❌ Gagal memuat pengaturan. Lihat konsol untuk detail.", "error");
+      }
+    }
+
+    // --- Bot Core Functions ---
+
+    /**
+     * Posts content by a selected bot.
+     * @param {string} botStyle - The style of the bot (e.g., 'curhat', 'lucu').
+     * @param {string[]} contentArray - Array of content strings for the bot.
+     */
+    async function postByBot(botStyle, contentArray) {
+      if (!contentArray || contentArray.length === 0) {
+        console.warn(`[${botTypes[botStyle]?.name || botStyle}] Tidak ada konten tersedia untuk bot posting.`);
+        return;
+      }
+      const bot = botTypes[botStyle];
+      const content = contentArray[Math.floor(Math.random() * contentArray.length)];
       const post = {
         description: content,
         userId: bot.id,
+        userName: bot.name,
         createdAt: Date.now(),
         votes: 0,
         votedBy: [],
-        comments: []
+        comments: [],
+        type: botStyle
       };
-      db.collection("posts").add(post);
+      try {
+        await db.collection("posts").add(post);
+        console.log(`[${bot.name}] Memposting: "${content.substring(0, 30)}..."`);
+      } catch (error) {
+        console.error(`Gagal posting oleh ${bot.name}:`, error);
+      }
     }
 
-    function autoVoteBot() {
-      db.collection("posts").get().then(snapshot => {
+    /**
+     * Performs an automatic vote by the voting bot.
+     */
+    async function autoVoteBot() {
+      try {
+        const snapshot = await db.collection("posts").get();
         const docs = snapshot.docs;
-        if (!docs.length) return;
-        const doc = docs[Math.floor(Math.random() * docs.length)];
-        const data = doc.data();
-        const vote = Math.random() < 0.7 ? 1 : -1;
+        if (!docs.length) {
+          console.log("Tidak ada postingan untuk divoting.");
+          return;
+        }
 
-        db.collection("posts").doc(doc.id).update({
-          votes: (data.votes || 0) + vote,
-          votedBy: (data.votedBy || []).concat("botVoting")
+        const eligibleDocs = docs.filter(doc => {
+            const data = doc.data();
+            // Check if the bot hasn't voted on this post yet
+            return !(data.votedBy || []).includes(botTypes.vote.id);
         });
-      });
+
+        if (!eligibleDocs.length) {
+            console.log("Tidak ada postingan yang memenuhi syarat untuk divoting oleh bot ini.");
+            return;
+        }
+
+        const doc = eligibleDocs[Math.floor(Math.random() * eligibleDocs.length)];
+        const data = doc.data();
+        const vote = Math.random() < 0.7 ? 1 : -1; // 70% chance of upvote
+
+        const votedBy = new Set(data.votedBy || []);
+        votedBy.add(botTypes.vote.id);
+
+        await db.collection("posts").doc(doc.id).update({
+          votes: (data.votes || 0) + vote,
+          votedBy: Array.from(votedBy)
+        });
+        console.log(`[${botTypes.vote.name}] Melakukan voting (${vote}) pada postingan ${doc.id}`);
+      } catch (error) {
+        console.error("Gagal melakukan voting otomatis:", error);
+      }
     }
 
-    function autoCommentBot() {
-      db.collection("posts").get().then(snapshot => {
-        const post = snapshot.docs.find(doc => {
+    /**
+     * Performs an automatic comment by the commenting bot.
+     * @param {string[]} commentContentArray - Array of comment strings.
+     */
+    async function autoCommentBot(commentContentArray) {
+      if (!commentContentArray || commentContentArray.length === 0) {
+        console.warn(`[${botTypes.komen.name}] Tidak ada konten komentar tersedia.`);
+        return;
+      }
+      try {
+        const snapshot = await db.collection("posts").get();
+        const eligiblePosts = snapshot.docs.filter(doc => {
           const data = doc.data();
-          return !data.comments || data.comments.length < 3;
+          // Only comment on posts with less than 3 bot comments or if no comments exist
+          const botComments = (data.comments || []).filter(comment => comment.userId === botTypes.komen.id);
+          return botComments.length < 3;
         });
 
-        if (!post) return;
+        if (!eligiblePosts.length) {
+          console.log("Tidak ada postingan yang memenuhi syarat untuk dikomentari.");
+          return;
+        }
 
-        const komentar = kontenBot.komen[Math.floor(Math.random() * kontenBot.komen.length)];
+        const post = eligiblePosts[Math.floor(Math.random() * eligiblePosts.length)];
+        const komentar = commentContentArray[Math.floor(Math.random() * commentContentArray.length)];
         const comment = {
-          userId: "botKomentator1",
+          userId: botTypes.komen.id,
+          userName: botTypes.komen.name,
           text: komentar,
           createdAt: Date.now()
         };
-        const existing = post.data().comments || [];
+        const existingComments = post.data().comments || [];
 
-        db.collection("posts").doc(post.id).update({
-          comments: [...existing, comment]
+        await db.collection("posts").doc(post.id).update({
+          comments: [...existingComments, comment]
         });
-      });
+        console.log(`[${botTypes.komen.name}] Mengomentari postingan ${post.id}: "${komentar.substring(0, 20)}..."`);
+      } catch (error) {
+        console.error("Gagal melakukan komentar otomatis:", error);
+      }
     }
 
-    // Jadwal Otomatis dengan baca setting
-    function scheduleBotActivity() {
-      db.collection("botSettings").doc("global").get().then(doc => {
-        if (!doc.exists) return;
+    /**
+     * Schedules bot activities based on saved settings.
+     */
+    async function scheduleBotActivity() {
+      // Clear existing intervals to prevent duplicates
+      for (const key in botIntervals) {
+        clearInterval(botIntervals[key]);
+      }
+      botIntervals = {};
 
-        const { postBots, commentBots, voteBots } = doc.data();
-        const totalActions = postBots + commentBots + voteBots;
-        if (totalActions === 0) return;
+      try {
+        const doc = await db.collection("botSettings").doc("global").get();
+        if (!doc.exists) {
+          showStatus("ℹ️ Pengaturan bot belum ditemukan. Silakan simpan pengaturan terlebih dahulu.", "info");
+          return;
+        }
 
-        const interval = (24 * 60 * 60 * 1000) / totalActions; // dibagi rata dalam sehari
+        const settings = doc.data();
+        // Use optional chaining with default fallbacks
+        const { postBotsPerDay = 0, commentBotsPerDay = 0, voteBotsPerDay = 0 } = settings.general || {};
+        const enabledBots = settings.botEnabled || {};
+        const botContent = settings.botContent || {};
 
-        setInterval(() => {
-          const rand = Math.random();
-          if (rand < postBots / totalActions) postByBot();
-          else if (rand < (postBots + voteBots) / totalActions) autoVoteBot();
-          else autoCommentBot();
-        }, interval);
-      });
+        const totalActions = postBotsPerDay + commentBotsPerDay + voteBotsPerDay;
+
+        if (totalActions === 0) {
+          showStatus("⚠️ Tidak ada aktivitas bot yang dijadwalkan (semua target 0).", "info");
+          return;
+        }
+
+        const totalMillisecondsInDay = 24 * 60 * 60 * 1000;
+        const baseInterval = totalMillisecondsInDay / totalActions;
+
+        const actionQueue = [];
+        // Populate action queue based on target counts and enabled status
+        for (let i = 0; i < postBotsPerDay; i++) {
+          const enabledPostBots = Object.keys(enabledBots).filter(key => enabledBots[key] && key !== 'vote' && botContent[key] && botContent[key].length > 0);
+          if (enabledPostBots.length > 0) {
+              actionQueue.push({ type: 'post', botStyle: enabledPostBots[Math.floor(Math.random() * enabledPostBots.length)] });
+          }
+        }
+        for (let i = 0; i < commentBotsPerDay; i++) {
+            if (enabledBots.komen && botContent.komen && botContent.komen.length > 0) {
+                actionQueue.push({ type: 'comment' });
+            }
+        }
+        for (let i = 0; i < voteBotsPerDay; i++) {
+            if (enabledBots.vote) {
+                actionQueue.push({ type: 'vote' });
+            }
+        }
+
+        // Shuffle the action queue for more random distribution throughout the day
+        for (let i = actionQueue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [actionQueue[i], actionQueue[j]] = [actionQueue[j], actionQueue[i]];
+        }
+
+        let actionIndex = 0;
+
+        // Schedule the interval to pick an action from the shuffled queue
+        botIntervals.mainScheduler = setInterval(() => {
+          if (actionIndex >= actionQueue.length) {
+            console.log("Semua aksi harian terjadwal telah selesai. Menunggu siklus berikutnya.");
+            actionIndex = 0; // Reset for next day's cycle
+            return;
+          }
+
+          const action = actionQueue[actionIndex];
+
+          if (action.type === 'post') {
+            postByBot(action.botStyle, botContent[action.botStyle]);
+          } else if (action.type === 'comment') {
+            autoCommentBot(botContent.komen);
+          } else if (action.type === 'vote') {
+            autoVoteBot();
+          }
+
+          actionIndex++;
+        }, baseInterval);
+
+        showStatus(`✅ Bot dijadwalkan: ${postBotsPerDay} post, ${commentBotsPerDay} komentar, ${voteBotsPerDay} voting per hari.`, "success");
+
+      } catch (error) {
+        console.error("Gagal menjadwalkan bot:", error);
+        showStatus("❌ Gagal menjadwalkan bot. Lihat konsol untuk detail.", "error");
+      }
     }
 
-    // Jalankan saat halaman dibuka
-    scheduleBotActivity();
+    // Initialize settings on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBotSettings(); // Load settings when page loads and then schedule
+    });
   </script>
 </body>
-  </html>
+</html>
