@@ -27,6 +27,7 @@ const loadingIndicator = document.getElementById('loading-indicator');
 const errorMessageElement = document.getElementById('error-message');
 const pageContents = document.querySelectorAll('.page-content');
 const sidebarPc = document.querySelector('.sidebar-pc');
+const splashScreen = document.getElementById('splashScreen'); // Get the splash screen element
 
 // Profile Elements
 const profilePicHeader = document.getElementById('profilePic');
@@ -267,6 +268,7 @@ auth.onAuthStateChanged((user) => {
  * @param {string} pageId - ID elemen div halaman yang akan ditampilkan.
  * @param {string} pagePath - (Opsional) Path ke file HTML eksternal untuk konten halaman.
  * @param {string} loadDataId - (Opsional) ID data yang akan dimuat (misal: group ID).
+ * @returns {Promise<void>} Resolves when the page is shown and content is loaded.
  */
 async function showPage(pageId, pagePath = null, loadDataId = null) {
     // Cleanup existing comment listeners
@@ -327,16 +329,18 @@ async function showPage(pageId, pagePath = null, loadDataId = null) {
     });
 
     if (pageId === 'explorePage') {
-        loadExplorePosts();
+        await loadExplorePosts();
     } else if (pageId === 'homePage') {
         // Posts already loaded by onSnapshot. Ensure filters are clear if re-entering.
         if (pcSearchBar) pcSearchBar.value = '';
         filterHomePagePosts('');
+        // No explicit load needed here as the onSnapshot for 'posts' handles it.
+        // We'll hide the splash screen once this initial data setup is done.
     } else if (pageId === 'groupsPage') {
-        loadGroupsContent(); // Load the main groups list (popular/your groups)
+        await loadGroupsContent(); // Load the main groups list (popular/your groups)
     } else if (pageId === 'groupDetailPage' && loadDataId) {
         currentGroupId = loadDataId; // Set the current group ID
-        loadGroupDetail(loadDataId); // Load the specific group's details
+        await loadGroupDetail(loadDataId); // Load the specific group's details
     }
 
 
@@ -415,40 +419,38 @@ function attachDynamicPageListeners(pageId) {
 
 // Event Listeners for Navigation (bottom nav & sidebar)
 navItems.forEach(item => {
-    item.addEventListener('click', (e) => {
+    item.addEventListener('click', async (e) => { // Made async to await showPage
         e.preventDefault();
         const page = e.currentTarget.dataset.page;
         if (page) {
-            showPage(page + 'Page'); // Menampilkan halaman berdasarkan data-page
+            await showPage(page + 'Page'); // Await the page showing
         }
     });
 });
 
 // Event listeners for setting page buttons that load new content
-document.addEventListener('click', (e) => {
+document.addEventListener('click', async (e) => { // Made async to await showPage
     const target = e.target.closest('.setting-button, .donate-button, .group-button');
     if (target) {
         e.preventDefault();
         if (target.dataset.pageId && target.dataset.pagePath) {
-            showPage(target.dataset.pageId, target.dataset.pagePath);
+            await showPage(target.dataset.pageId, target.dataset.pagePath);
         } else if (target.id === 'createGroupButton' || target.classList.contains('group-button')) {
-            showPage('createGroupPage');
+            await showPage('createGroupPage');
         }
     }
 });
 
 
 // Initial page load (triggered when DOM is fully loaded)
-document.addEventListener('DOMContentLoaded', () => {
-    // Hide splash screen after a delay (can be replaced with actual app load logic)
-    const splashScreen = document.getElementById('splashScreen');
-    setTimeout(() => {
-        if (splashScreen) {
-            splashScreen.classList.add('hidden');
-        }
-    }, 2000); // 2-second splash screen
+document.addEventListener('DOMContentLoaded', async () => { // Make this async
+    await showPage('homePage'); // Default page to show, await its completion
 
-    showPage('homePage'); // Default page to show
+    // Only hide splash screen AFTER the home page content (and its initial data load) is ready.
+    if (splashScreen) {
+        splashScreen.classList.add('hidden'); // Add the class to hide it via CSS
+    }
+
     const isDarkMode = localStorage.getItem('darkModeEnabled') === 'true';
     if (darkModeToggle) {
         darkModeToggle.checked = isDarkMode;
@@ -625,7 +627,7 @@ if (finalUploadButton) finalUploadButton.addEventListener('click', async () => {
 
         const activePage = document.querySelector('.page-content.active');
         if (activePage) {
-            showPage(activePage.id, null, currentGroupId); // Pass currentGroupId to re-load group data if applicable
+            await showPage(activePage.id, null, currentGroupId); // Pass currentGroupId to re-load group data if applicable
         }
 
     } catch (error) {
@@ -1155,7 +1157,7 @@ window.openVideoView = async function(initialPostId = null) {
         }
 
         setupVideoFeedObserver(); // Set up intersection observer for the video feed
-        showPage('videoViewPage'); // Show the video view page
+        await showPage('videoViewPage'); // Show the video view page
 
     } catch (error) {
         console.error("Error opening video view:", error);
@@ -1686,7 +1688,7 @@ if (createGroupForm) {
             await db.collection("groups").add(groupData);
             showMessage(authStatusElement, "Grup berhasil dibuat!");
             resetCreateGroupForm();
-            showPage('groupsPage'); // Navigate back to the groups list
+            await showPage('groupsPage'); // Navigate back to the groups list
 
         } catch (error) {
             console.error("Error saat membuat grup:", error);
@@ -1712,7 +1714,7 @@ async function loadGroupsContent() {
         let currentSearchTerm = '';
 
         // Only add listeners once
-        if (!categoriesContainer.dataset.listenersAdded) {
+        if (categoriesContainer && !categoriesContainer.dataset.listenersAdded) {
             categoriesContainer.addEventListener('click', (e) => {
                 const targetButton = e.target.closest('.category-tag');
                 if (targetButton) {
@@ -1889,7 +1891,7 @@ window.toggleGroupMembership = async function(groupId, action) {
             }
             transaction.update(groupRef, { members: members, memberCount: memberCount });
         });
-        loadGroupsContent(); // Reload the groups content to update UI after join/leave
+        await loadGroupsContent(); // Reload the groups content to update UI after join/leave
     } catch (error) {
         console.error(`Error ${action}ing group:`, error);
         if (error !== "Owner cannot leave their own group.") {
