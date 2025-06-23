@@ -1,382 +1,366 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en" >
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/ycrTKpts/1750453333696.png">
+  <meta charset="UTF-8">
+  <title>Whatfun splash</title>
+  <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
+<link rel='stylesheet' href='https://unpkg.com/splitting@1.0.6/dist/splitting.css'>
+<style>@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@900&display=swap");
+:root {
+  --duration: 6s;
+  --wave-duration: calc(var(--duration) * 0.25);
+  --text-in-delay: calc(var(--duration) * 0.275);
+  --text-in-duration: calc(var(--duration) * 0.1);
+  --easing: cubic-bezier(0.5, 0, 0.5, 1);
+  --dot-color: #ffd950;
+  --dot-color-dark: #977a12;
+}
 
-  <meta property="og:title" content="Gabung ke WhatFun – media social anonymous tampa login">
-  <meta property="og:description" content= "Gabung ke WhatFun – media sosial online tanpa ribet! Buat postingan, ngobrol di grup, dan seru-seruan tanpa perlu login. Cukup buka, ekspresikan dirimu, dan nikmati kebebasan bersosial!">
-  <meta property="og:image" content="https://i.ibb.co/0VtCNtH5/1750453371020.png">
-  <meta property="og:url" content="https://whatfun-baec7.web.app/?">
-  <meta property="og:type" content="website">
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  position: relative;
+}
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="whatfun-media social anonymous">
-  <meta name="twitter:description" content="Gabung ke WhatFun – sosial media online tanpa perlu daftar atau login. Buat postingan, obrolan grup, dan ekspresikan dirimu dengan bebas!">
-  <meta name="twitter:image" content="https://i.ibb.co/0VtCNtH5/1750453371020.png">
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #060506;
+  color: white;
+  font-family: "Heebo", sans-serif;
+  overflow: hidden;
+}
 
-  <title>WhatFun - Your Creative Hub</title>
-  <link rel="stylesheet" href="style.css"/>
+body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+.container {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+.container > * {
+  grid-area: 1/1;
+}
 
- <style>
-    .main-content {
-      padding-top: 30px; /* memberi jarak dari header fixed */
-    }
-  </style>
+.title {
+  font-size: 10vmin;
+  margin: 0;
+}
 
+.title .char {
+  --delay: calc(var(--text-in-delay) + (0.25s * (1 - var(--distance-percent))));
+  -webkit-animation: text-in var(--text-in-duration) var(--easing) var(--delay) backwards;
+          animation: text-in var(--text-in-duration) var(--easing) var(--delay) backwards;
+  transform-origin: center 1em;
+}
+@-webkit-keyframes text-in {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(-0.4em * var(--char-offset))) scale(0);
+  }
+  90% {
+    transform: translateX(0em) scale(1.1);
+  }
+}
+@keyframes text-in {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(-0.4em * var(--char-offset))) scale(0);
+  }
+  90% {
+    transform: translateX(0em) scale(1.1);
+  }
+}
+.title .char[data-char=t], .title .char[data-char=i] {
+  visibility: hidden;
+  --squish-scale: 0.6;
+  --squish-y: 10%;
+}
+.title .char[data-char=t]:before, .title .char[data-char=i]:before {
+  -webkit-animation: text-squish var(--duration) var(--easing) forwards;
+          animation: text-squish var(--duration) var(--easing) forwards;
+  visibility: visible;
+  transform-origin: center 1em;
+}
+.title .char[data-char=i] {
+  --squish-scale: 0.9;
+  --squish-y: 5%;
+}
+@-webkit-keyframes text-squish {
+  47.5%, 52.5% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(calc(var(--squish-y) * 1)) scaleY(calc(var(--squish-scale) * 1));
+  }
+}
+@keyframes text-squish {
+  47.5%, 52.5% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(calc(var(--squish-y) * 1)) scaleY(calc(var(--squish-scale) * 1));
+  }
+}
+.title .char:last-child {
+  -webkit-animation: text-in var(--text-in-duration) var(--easing) var(--delay) backwards, text-bonk var(--duration) var(--easing) forwards;
+          animation: text-in var(--text-in-duration) var(--easing) var(--delay) backwards, text-bonk var(--duration) var(--easing) forwards;
+}
+@-webkit-keyframes text-bonk {
+  80%, 85%, to {
+    transform: none;
+  }
+  82% {
+    transform: translateX(-20%);
+  }
+}
+@keyframes text-bonk {
+  80%, 85%, to {
+    transform: none;
+  }
+  82% {
+    transform: translateX(-20%);
+  }
+}
+
+.dot {
+  font-size: 5vmin;
+  width: 1em;
+  height: 1em;
+  -webkit-animation: dot var(--duration) var(--easing) both;
+          animation: dot var(--duration) var(--easing) both;
+}
+
+.dot-inner {
+  -webkit-animation: dot-inner var(--duration) var(--easing) both;
+          animation: dot-inner var(--duration) var(--easing) both;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+.dot-inner > * {
+  grid-area: 1/1;
+}
+
+.dot-wave {
+  width: 200%;
+  height: 200%;
+  fill: var(--dot-color);
+  -webkit-animation: wave-in var(--wave-duration) var(--easing);
+          animation: wave-in var(--wave-duration) var(--easing);
+  --offset-x: -110%;
+}
+@-webkit-keyframes wave-in {
+  0% {
+    transform: translateY(100%) translateX(var(--offset-x));
+  }
+  70% {
+    transform: translateY(30%) translateX(0%);
+  }
+}
+@keyframes wave-in {
+  0% {
+    transform: translateY(100%) translateX(var(--offset-x));
+  }
+  70% {
+    transform: translateY(30%) translateX(0%);
+  }
+}
+.dot-wave.background {
+  fill: var(--dot-color-dark);
+  -webkit-animation-duration: calc(0.95 * var(--wave-duration));
+          animation-duration: calc(0.95 * var(--wave-duration));
+  --offset-x: 110%;
+}
+
+@-webkit-keyframes dot {
+  from {
+    opacity: 0;
+    transform: scale(3);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(3);
+  }
+  15% {
+    transform: scale(3) translateY(0.5em) scaleY(1.5);
+  }
+  20% {
+    transform: scale(1) translateY(-300%);
+  }
+  30% {
+    transform: translateY(1em) scaleY(0.5);
+  }
+  40% {
+    transform: translateY(-400%);
+  }
+  50% {
+    transform: translateY(-1em);
+  }
+  53% {
+    transform: translateY(-300%);
+  }
+  56% {
+    transform: translateY(-1em);
+  }
+  59% {
+    transform: translateY(-200%);
+  }
+  62% {
+    transform: translateY(1em);
+  }
+  80%, 90%, to {
+    transform: translateY(1em);
+  }
+}
+
+@keyframes dot {
+  from {
+    opacity: 0;
+    transform: scale(3);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(3);
+  }
+  15% {
+    transform: scale(3) translateY(0.5em) scaleY(1.5);
+  }
+  20% {
+    transform: scale(1) translateY(-300%);
+  }
+  30% {
+    transform: translateY(1em) scaleY(0.5);
+  }
+  40% {
+    transform: translateY(-400%);
+  }
+  50% {
+    transform: translateY(-1em);
+  }
+  53% {
+    transform: translateY(-300%);
+  }
+  56% {
+    transform: translateY(-1em);
+  }
+  59% {
+    transform: translateY(-200%);
+  }
+  62% {
+    transform: translateY(1em);
+  }
+  80%, 90%, to {
+    transform: translateY(1em);
+  }
+}
+@-webkit-keyframes dot-inner {
+  from, 45% {
+    transform: none;
+  }
+  70% {
+    transform: translateX(6em);
+    -webkit-animation-timing-function: cubic-bezier(0.5, 0, 1, 0);
+            animation-timing-function: cubic-bezier(0.5, 0, 1, 0);
+  }
+  80% {
+    transform: translateX(4.3em);
+    -webkit-animation-timing-function: var(--easing);
+            animation-timing-function: var(--easing);
+  }
+  83%, to {
+    transform: translateX(4.4em);
+  }
+}
+@keyframes dot-inner {
+  from, 45% {
+    transform: none;
+  }
+  70% {
+    transform: translateX(6em);
+    -webkit-animation-timing-function: cubic-bezier(0.5, 0, 1, 0);
+            animation-timing-function: cubic-bezier(0.5, 0, 1, 0);
+  }
+  80% {
+    transform: translateX(4.3em);
+    -webkit-animation-timing-function: var(--easing);
+            animation-timing-function: var(--easing);
+  }
+  83%, to {
+    transform: translateX(4.4em);
+  }
+}
+/* Small helper to keep animation in sync */
+body:not([data-play]) *,
+body:not([data-play]) *:before,
+body:not([data-play]) *:after {
+  visibility: hidden;
+  -webkit-animation: none !important;
+          animation: none !important;
+}</style>
 </head>
 <body>
-   <div id="splashScreen" class="splash-screen">
-    <div class="splash-content">
-      <img src="https://whatfun-io.vercel.app/logo/logo.png" alt="WhatFun Logo" class="splash-logo">
-      <h1 class="splash-title">WhatFun</h1>
-      <div class="splash-spinner"></div>
-      <p class="splash-loading-text">Sabar ga lama...</p>
+<div class="container">
+
+  <h1 class="title" data-splitting>Whatfun</h1>
+
+  <div class="dot">
+    <div class="dot-inner">
+      <svg class="dot-wave background" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+        <path d="M799.09 90s11.04 0 0 0c-80.714 0-79.621-90-200-90-120.377 0-118.607 90-200 90-81.391 0-81.215-90-200-90C80.308 0 78.68 89.29-.91 90c-6.946.062 0 0 0 0v510h800V90z" />
+      </svg>
+      <svg class="dot-wave foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+        <path d="M799.09 90s11.04 0 0 0c-80.714 0-79.621-90-200-90-120.377 0-118.607 90-200 90-81.391 0-81.215-90-200-90C80.308 0 78.68 89.29-.91 90c-6.946.062 0 0 0 0v510h800V90z" />
+      </svg>
     </div>
   </div>
-  <header id="mainHeader">
-    <h1>WhatFun</h1>
-    <div class="header-right">
-      <div class="search-bar-pc">
-        <input type="text" id="pcSearchBar" placeholder="Cari postingan..."/>
-        <button><i class="fas fa-search"></i></button>
-      </div>
-      <input type="text" id="mobileSearchBar" placeholder="Cari..." style="display: none;"/>
-      <div class="profile-anonymous" id="anonymousProfile">
-        <img src="https://picsum.photos/50/50?random=1" alt="Profile" id="profilePic"/>
-      </div>
-    </div>
-  </header>
-
-  <div id="auth-status" class="status-message"></div>
-  <div id="loading-indicator" class="loading-spinner" style="display: none;"></div>
-  <div id="error-message" class="error-message" style="display: none;"></div>
-
-  <div class="main-layout-container">
-    <aside class="sidebar-pc" id="sidebarPC">
-      <div class="profile-anonymous-sidebar" id="anonymousProfileSidebar">
-        <img src="https://picsum.photos/80/80?random=1" alt="Profile" id="profilePicSidebar"/>
-        <p>Pengguna Anonim</p>
-      </div>
-      <nav class="sidebar-nav">
-        <a href="#homePage" class="nav-item active" data-page="home"><i class="fas fa-home"></i> Beranda</a>
-        <a href="#explorePage" class="nav-item" data-page="explore"><i class="fas fa-compass"></i> Explore</a>
-        <a href="#groupsPage" class="nav-item" data-page="groups"><i class="fas fa-users"></i> Grup</a>
-        <a href="#settingsPage" class="nav-item" data-page="settings"><i class="fas fa-cog"></i> Pengaturan</a>
-      </nav>
-    </aside>
-
-  <main class="main-content mt-16">
-      <section class="create-post-section" id="createPostSection">
-        <div class="post-input-area" id="openCreatePostModal">
-          <span class="placeholder-text">Apa yang Anda pikirkan?</span>
-        </div>
-        <div class="post-action-icons">
-          <div class="icon-item" id="openPhotoUpload">
-            <i class="fas fa-image"></i>
-            <span>Foto</span>
-          </div>
-          <div class="icon-item" id="openVideoUpload">
-            <i class="fas fa-video"></i>
-            <span>Video</span>
-          </div>
-          <div class="icon-item" id="openTextUpload">
-            <i class="fas fa-edit"></i>
-            <span>Teks</span>
-          </div>
-        </div>
-      </section>
-
-      <div id="homePage" class="page-content active">
-        <div id="content-container">
-          <p>Memuat konten...</p>
-        </div>
-      </div>
-
-      <div id="explorePage" class="page-content">
-        <div class="explore-search">
-          <input type="text" id="exploreSearchBar" placeholder="Cari di Explore..."/>
-          <button id="exploreSearchBtn"><i class="fas fa-search"></i></button>
-        </div>
-        <div id="explore-content-container">
-          <p>Memuat rekomendasi...</p>
-        </div>
-      </div>
-
-      <div id="videoViewPage" class="page-content video-reels-page">
-        <div id="reelsContainer" class="reels-container">
-            <div class="video-reel-item" data-post-id="">
-                <video class="reel-video" controlslist="nodownload nofullscreen" loop autoplay playsinline></video>
-                <div class="reel-overlay">
-                    <div class="play-pause-icon">
-                        <i class="fas fa-play"></i> </div>
-                    <div class="video-info">
-                        <h3 class="reel-title"></h3>
-                        <p class="reel-description"></p>
-                        <div class="reel-hashtags"></div>
-                    </div>
-                </div>
-                <div class="reel-actions">
-                    <button class="upvote-button"><i class="fas fa-arrow-up"></i> <span class="upvote-count">0</span></button>
-                    <button class="downvote-button"><i class="fas fa-arrow-down"></i> <span class="downvote-count">0</span></button>
-                    <button class="comment-button"><i class="fas fa-comment"></i> <span class="comment-count">0</span></button>
-                </div>
-                 <div class="comments-section">
-                    <h3>Komentar</h3>
-                    <div class="comment-input-bar">
-                        <input type="text" placeholder="Tambahkan komentar..."/>
-                        <button>Kirim</button>
-                    </div>
-                    <div class="comment-list">
-                        <p class="no-comments">Belum ada komentar.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-
-      <div id="settingsPage" class="page-content">
-        <div class="page-card">
-          <h2>Pengaturan Aplikasi</h2>
-          <div class="setting-item">
-            <span>Mode Gelap</span>
-            <label class="switch">
-              <input type="checkbox" id="darkModeToggle"/>
-              <span class="slider round"></span>
-            </label>
-          </div>
-          <div class="setting-item">
-            <span>Donasi untuk WhatFun</span>
-            <button class="setting-button" data-page-path="donate-coffee.html" data-page-id="donateCoffeePage"><i class="fas fa-coffee"></i> Beli Kopi</button>
-            <button class="setting-button" data-page-path="donate-custom.html" data-page-id="donateCustomPage"><i class="fas fa-dollar-sign"></i> Donasi Kustom</button>
-          </div>
-          <div class="setting-item">
-            <span>Pusat Bantuan</span>
-            <button class="setting-button" data-page-path="help-center.html" data-page-id="helpCenterPage"><i class="fas fa-question-circle"></i> Kunjungi</button>
-          </div>
-          <div class="setting-item">
-            <span>Tentang Kami</span>
-            <button class="setting-button" data-page-path="about-us.html" data-page-id="aboutUsPage"><i class="fas fa-info-circle"></i> Lihat</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="donateCoffeePage" class="page-content"></div>
-      <div id="donateCustomPage" class="page-content"></div>
-      <div id="helpCenterPage" class="page-content"></div>
-      <div id="aboutUsPage" class="page-content"></div>
-
-      <div id="groupsPage" class="page-content">
-          <div class="explore-search"> <input type="text" placeholder="Cari grup...">
-              <button><i class="fas fa-search"></i></button>
-          </div>
-          <div class="group-options"> <a href="#createGroupPage" class="group-button"><i class="fas fa-plus"></i> Tambah Grup Baru</a>
-          </div>
-
-          <div class="group-categories"> <button class="category-tag active" data-category="all"><i class="fas fa-grip-horizontal"></i> Semua</button>
-              <button class="category-tag" data-category="gaming"><i class="fas fa-gamepad"></i> Gaming</button>
-              <button class="category-tag" data-category="learning"><i class="fas fa-book"></i> Belajar</button>
-              <button class="category-tag" data-category="environment"><i class="fas fa-leaf"></i> Lingkungan</button>
-              <button class="category-tag" data-category="business"><i class="fas fa-briefcase"></i> Bisnis</button>
-              <button class="category-tag" data-category="art"><i class="fas fa-palette"></i> Seni</button>
-              <button class="category-tag" data-category="culinary"><i class="fas fa-utensils"></i> Kuliner</button>
-              <button class="category-tag" data-category="other"><i class="fas fa-ellipsis-h"></i> Lain-lain</button>
-          </div>
-
-          <div class="group-list" id="groupList">
-              <p class="no-groups-message">Belum ada grup yang dibuat. Ayo jadi yang pertama!</p>
-              </div>
-      </div>
-
-      <div id="createGroupPage" class="page-content">
-          <div class="page-card">
-              <h2>Buat Grup Baru</h2>
-              <form id="create-group-form">
-                  <div class="form-group banner-upload-area">
-                      <label for="groupBanner">Tambahkan Banner</label>
-                      <input type="file" id="groupBanner" accept="image/*">
-                      <div class="preview-area" id="bannerPreview"> <span><i class="fas fa-image"></i> Pratinjau Banner Akan Muncul di Sini</span>
-                          <img id="groupBannerPreview" src="" alt="Pratinjau Banner" style="display: none;"> </div>
-                  </div>
-
-                  <div class="form-group">
-                      <label for="groupName">Nama Grup</label>
-                      <input type="text" id="groupName" placeholder="Contoh: Komunitas Fotografi Alam" required>
-                  </div>
-
-                  <div class="form-group">
-                      <label for="groupDescription">Deskripsi</label>
-                      <textarea id="groupDescription" rows="5" placeholder="Jelaskan tentang grup Anda secara singkat dan jelas..." required></textarea>
-                  </div>
-
-                  <div class="form-group">
-                      <label for="groupCategory">Kategori</label>
-                      <select id="groupCategory" required>
-                          <option value="">Pilih Kategori</option>
-                          <option value="gaming">🎮 Gaming</option>
-                          <option value="learning">📚 Belajar</option>
-                          <option value="environment">🌳 Lingkungan</option>
-                          <option value="business">💼 Bisnis</option>
-                          <option value="art">🎨 Seni</option>
-                          <option value="culinary">🍳 Kuliner</option>
-                          <option value="other">✨ Lain-lain</option>
-                      </select>
-                  </div>
-
-                  <div class="form-actions">
-                      <button type="submit" class="button-primary"><i class="fas fa-plus-circle"></i> Buat Grup</button> <button type="button" class="button-secondary" onclick="showPage('groupsPage')"><i class="fas fa-times-circle"></i> Batal</button> </div>
-              </form>
-          </div>
-      </div>
-
-      <div id="groupDetailPage" class="page-content">
-          <button class="button-secondary" onclick="showPage('groupsPage')" style="margin-bottom: 25px;"><i class="fas fa-arrow-left"></i> Kembali ke Daftar Grup</button>
-          <img id="detailGroupBanner" src="" alt="Banner Grup" class="detail-group-banner">
-
-          <div class="group-detail-header">
-              <h1 id="detailGroupName"></h1>
-              <p id="detailGroupDescription"></p>
-          </div>
-
-          <div class="vote-buttons" style="margin-bottom: 20px;">
-              <button id="voteUpButton" class="upvote-button"><i class="fas fa-thumbs-up"></i> <span class="upvote-count">0</span></button>
-              <button id="voteDownButton" class="downvote-button"><i class="fas fa-thumbs-down"></i> <span class="downvote-count">0</span></button>
-          </div>
-          <span class="timer" id="detailGroupTimer">Waktu Tersisa: 23 jam 59 menit</span>
-          <p>(Grup akan bertahan jika **Vote Up** lebih banyak dari **Vote Down** dalam 24 jam pertama.)</p>
+</div>
 
 
-          <div class="create-discussion-section">
-              <div class="post-input-area" id="openGroupPostModal"> <span class="placeholder-text">Bagikan pemikiran, pertanyaan, atau update Anda di sini...</span>
-              </div>
-              <div class="post-action-icons">
-                  <div class="icon-item" id="openGroupPhotoUpload">
-                      <i class="fas fa-image"></i>
-                      <span>Foto</span>
-                  </div>
-                  <div class="icon-item" id="openGroupVideoUpload">
-                      <i class="fas fa-video"></i>
-                      <span>Video</span>
-                  </div>
-              </div>
-              <button class="button-primary" id="postGroupContentButton" style="margin-top: 15px; width: 100%;"><i class="fas fa-paper-plane"></i> Posting</button>
-          </div>
+<script src='https://unpkg.com/splitting@1.0.6/dist/splitting.js'></script>
+<script>
+console.clear();
 
-          <div class="post-list" id="groupPostList">
-              <h3>Postingan Terbaru</h3>
-              <p class="no-posts-message">Belum ada postingan di grup ini.</p>
-          </div>
-      </div>
+Splitting();
 
-    </main>
-  </div>
+// Replay animation by hiding & showing the element again
+let el = document.body;
+el.addEventListener("click", function (e) {
+  el.hidden = true;
+  requestAnimationFrame(() => {
+    el.hidden = false;
+  });
+});
 
-  <nav class="bottom-nav" id="bottomNav">
-    <a href="#homePage" class="nav-item active" data-page="home">
-      <i class="fas fa-home"></i>
-      <span>Beranda</span>
-    </a>
-    <a href="#explorePage" class="nav-item" data-page="explore">
-      <i class="fas fa-compass"></i>
-      <span>Explore</span>
-    </a>
-    <a href="#" class="nav-item add-post-button" id="openCreatePostMobile">
-      <i class="fas fa-plus-circle"></i>
-    </a>
-    <a href="#groupsPage" class="nav-item" data-page="groups">
-      <i class="fas fa-users"></i>
-      <span>Grup</span>
-    </a>
-    <a href="#settingsPage" class="nav-item" data-page="settings">
-      <i class="fas fa-cog"></i>
-      <span>Pengaturan</span>
-    </a>
-  </nav>
+// Small helper to make sure the animation stays in sync.
+requestAnimationFrame(() => {
+  document.body.dataset.play = true;
+});
 
-  <div id="uploadModal" class="modal">
-    <div class="modal-content upload-page-style">
-      <div class="modal-header">
-        <button class="back-button" id="modalBackButton">
-          <i class="fas fa-arrow-left"></i> Kembali
-        </button>
-        <h2 id="modalTitle">Buat Post Baru</h2>
-        <button class="upload-submit-button" id="finalUploadButton" disabled>Upload</button>
-      </div>
+// Redirect to homepage.html after the animation
+const animationDuration = 6000; // This should match the --duration in your CSS (6s = 6000ms)
 
-      <div class="modal-body">
-        <input type="text" id="postTitleInput" placeholder="Judul Post (opsional)"/>
-        <textarea id="postDescriptionInput" placeholder="Deskripsi/Keterangan..." rows="4"></textarea>
+setTimeout(() => {
+  window.location.href = "homepage.html";
+}, animationDuration);
+</script>
 
-        <input type="file" id="mediaFileInput" style="display: none;"/>
-
-        <div class="preview-area" id="previewArea">
-          <img id="imagePreview" src="" alt="Pratinjau Gambar" style="display: none;"/>
-          <video id="videoPreview" src="" controls style="display: none;"></video>
-          <p id="noMediaText">Pilih media untuk pratinjau</p>
-        </div>
-
-        <div class="media-upload-buttons">
-          <button id="selectMediaButton"><i class="fas fa-upload"></i> Pilih Foto/Video</button>
-        </div>
-
-        <input type="text" id="hashtagInput" placeholder="#hashtag #lainnya (pisahkan dengan spasi)" class="hashtag-input"/>
-        <input type="hidden" id="postTypeHiddenInput" value=""/>
-      </div>
-    </div>
-  </div>
-
-  <template id="video-post-template">
-    <div class="post-card video-post" data-post-id="">
-        <h3 class="post-title"></h3>
-        <small class="post-date"></small>
-        <div class="video-thumbnail-wrapper">
-            <video class="post-video" autoplay loop playsinline controlslist="nodownload"></video>
-            <div class="play-pause-overlay paused-icon">
-                <i class="fas fa-play"></i>
-            </div>
-        </div>
-        <p class="post-description"></p>
-        <div class="hashtags"></div>
-        <div class="vote-buttons">
-            <button class="upvote-button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.414l-5.293 5.293a1 1 0 0 0 1.414 1.414L11 7.828V19a1 1 0 0 0 2 0V7.828l2.879 2.879a1 1 0 0 0 1.414-1.414L12 4.414z"/></svg>
-                <span class="upvote-count">0</span>
-            </button>
-            <button class="downvote-button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 19.586l5.293-5.293a1 1 0 0 0-1.414-1.414L13 16.172V5a1 1 0 0 0-2 0v11.172l-2.879-2.879a1 1 0 0 0-1.414 1.414L12 19.586z"/></svg>
-                <span class="downvote-count">0</span>
-            </button>
-        </div>
-        <div class="comments-section">
-            <h3>Komentar</h3>
-            <div class="comment-input-bar">
-                <input type="text" placeholder="Tambahkan komentar..."/>
-                <button>Kirim</button>
-            </div>
-            <div class="comment-list">
-                <p class="no-comments">Belum ada komentar.</p>
-            </div>
-        </div>
-    </div>
-  </template>
-        <div id="uploadLoadingScreen" class="upload-loading-screen">
-          <div class="upload-loading-content">
-            <div class="upload-loading-spinner"></div>
-            <h3 class="upload-loading-title">Mengunggah Konten Anda...</h3>
-            <p class="upload-loading-progress" id="uploadProgressText">Memulai unggahan...</p>
-            <p class="upload-loading-tip">Tips: Jangan tutup halaman ini saat mengunggah.</p>
-          </div>
-        </div>
-
-  <script src="script.js"></script>
-</body>    
+</body>
 </html>
-  
